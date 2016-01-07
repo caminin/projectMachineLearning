@@ -7,7 +7,7 @@ public class myArffReader {
 		 DataSource source;
 		 Instances data;
 		try {
-			source = new DataSource("../data.arff");
+			source = new DataSource("data.arff");
 			data = source.getDataSet();
 			if (data.classIndex() == -1)
 				   data.setClassIndex(data.numAttributes() - 1);
