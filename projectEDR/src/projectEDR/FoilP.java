@@ -18,14 +18,14 @@ public class FoilP {
 	private EnsembleDeCas ensembleDeCas;
 
 	//initialisation
-	public void init(){
+	public void init(String file){
 		regles = new ArrayList<Regle>();
 		posAndNeg = new ArrayList<Boolean>();
 
 		//gestion lecture du fichier
 		//remplacer le paramètre avec un système d'ouverture de fichier
 		//+ vérification type de fichier et gestion exception
-		myArffReader reader = new myArffReader("data.arff");
+		myArffReader reader = new myArffReader(file);
 		Instances data = reader.getData();
 
 		//attribution des attributs
@@ -59,15 +59,14 @@ public class FoilP {
 	//main
 	public static void main (String args[]){
 		FoilP foil = new FoilP();
-		foil.init();
-		//foil.read("filename");
+		foil.init("data.arff");
 		System.out.println(foil.getEnsembleDeCas());
 	}
 
 
 
 
-	private EnsembleDeCas getEnsembleDeCas() {
+	public EnsembleDeCas getEnsembleDeCas() {
 		return ensembleDeCas;
 	}
 
