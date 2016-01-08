@@ -3,7 +3,7 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
 public class myArffReader {
-	Instances data;
+	private Instances data;
 	public myArffReader(String filename){
 		DataSource source;
 		try {
