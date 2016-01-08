@@ -1,23 +1,22 @@
 
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
- 
+
 public class myArffReader {
-	 myArffReader(){
-		 DataSource source;
-		 Instances data;
+	Instances data;
+	public myArffReader(String filename){
+		DataSource source;
 		try {
-			source = new DataSource("data.arff");
+			source = new DataSource(filename);
 			data = source.getDataSet();
 			if (data.classIndex() == -1)
-				   data.setClassIndex(data.numAttributes() - 1);
-			System.out.println(data.toString());
+				data.setClassIndex(data.numAttributes() - 1);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	 }
-	 
-	 
+
+	public Instances getData(){
+		return data;
+	}
 }
