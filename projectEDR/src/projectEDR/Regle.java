@@ -1,8 +1,12 @@
-<<<<<<< HEAD:projectEDR/src/Regle.java
-=======
 package projectEDR;
 
->>>>>>> e2dc136babeb05293ccd170c806839aff889be23:projectEDR/src/projectEDR/Regle.java
+import java.util.ArrayList;
+
 public class Regle {
-	
+	private ArrayList<Literal> lits;
+	private boolean conclusion;
+	public Regle(ArrayList<Literal> l, boolean c){
+		lits = l;
+		conclusion = c;
+	}
 }
