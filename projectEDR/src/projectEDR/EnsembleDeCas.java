@@ -30,6 +30,20 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 		}
 	}
 	
+	public ArrayList<Literal> getListLiteraux(){
+		ArrayList<Literal> list_l=new ArrayList<Literal>();
+		for(Cas c:this){
+			for(Literal l:c.getListLiteral()){
+				if(!list_l.contains(l)){
+					list_l.add(l);
+				}
+			}
+		}
+		
+		return list_l;
+		
+	}
+	
 	public ArrayList<Cas> getPos(){
 		ArrayList<Cas> pos = new ArrayList<Cas>();
 		for(Cas elem : this){
@@ -59,6 +73,41 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 			}
 		}
 		return nbCasPositif;
+	}
+	
+	public int getNbPositif(Literal l){
+		int index=-1,nbPos=0;
+		for(int i=0;i<attributs.length;i++){
+			if(attributs[i].equalsIgnoreCase(l.attribut)){
+				index=i;
+			}
+		}
+		for(int i=0;i<this.size();i++){
+			if(this.get(i).getLiteral(index).equals(l)){
+				if(this.get(i).getB()){
+					nbPos++;
+				}
+			}
+		}
+		
+		return nbPos;
+	}
+	
+	public int getNbNegatif(Literal l){
+		int index=-1,nbNeg=0;
+		for(int i=0;i<attributs.length;i++){
+			if(attributs[i].equalsIgnoreCase(l.attribut)){
+				index=i;
+			}
+		}
+		for(int i=0;i<this.size();i++){
+			if(this.get(i).getLiteral(index).equals(l)){
+				if(!this.get(i).getB()){
+					nbNeg++;
+				}
+			}
+		}
+		return nbNeg;
 	}
 	
 	public String toString(){

@@ -36,11 +36,11 @@ public class FoilP {
 		ensembleDeCas = new EnsembleDeCas(att, data.attribute(att.length-1).name());
 
 		//attribution des cas
-		Literal[] litt;
+		ArrayList<Literal> litt;
 		for(int i = 0; i<data.numInstances(); i++){
-			litt = new Literal[data.instance(i).numAttributes()];
+			litt = new ArrayList<>();
 			for(int j = 0; j<data.instance(i).numAttributes(); j++){
-				litt[j] = new Literal(data.attribute(j).name(), data.instance(i).stringValue(j));
+				litt.add(new Literal(data.attribute(j).name(), data.instance(i).stringValue(j)));
 			}
 			//ajoute un cas
 			// il faut comprendre ça : new Cas("sunny, cool, normal, FALSE, yes", "yes");
@@ -60,6 +60,7 @@ public class FoilP {
 	public static void main (String args[]){
 		FoilP foil = new FoilP();
 		foil.init("data.arff");
+		System.out.println(foil.getMaxGain(foil.getEnsembleDeCas().getPos(),foil.getEnsembleDeCas().getNeg()));
 		System.out.println(foil.getEnsembleDeCas());
 	}
 
@@ -79,7 +80,7 @@ public class FoilP {
 			ArrayList<Cas> pos2 = (ArrayList<Cas>) pos.clone();
 			//Tant que Neg2 différent d'ensemble vide
 			while(!neg2.isEmpty()){
-				
+
 			}
 		}
 
@@ -97,23 +98,46 @@ public class FoilP {
 		return ensembleDeCas;
 	}
 
-	public static double gain(int index,EnsembleDeCas edc){
-		Cas mycas=edc.get(index);
-		
-		//mycas.nbPos*log2(nbPos/(nbPos+nbNeg)) - log2(edc.getNbCasPositif()/(edc.size()));
-		return 0;
-	}
-	
-	public int getMaxGain(){
-		for(int i=0;i<ensembleDeCas.getAttributs().length;i++){
-			
-		}
-		return 0;
+	public static double gain(Literal l,EnsembleDeCas edc,ArrayList<Cas> pos2, ArrayList<Cas> neg2){
+		double nbPos=pos2.size();
+		double nbNeg=neg2.size();
+		double p=edc.getNbPositif(l);
+		double n=edc.getNbNegatif(l);
+		double gain = p*log2(p/(p+n)) - log2(nbPos/(nbPos+nbNeg));
+		System.out.println("gain de "+l+" : P:"+nbPos+" N:"+nbNeg+" p:"+p+" n:"+n+" val "+gain);
+		return gain;
 	}
 
-	/*public static double ent(int pplus, int pmoins){
-		return 0-pplus*log2(pplus) - pmoins*log2(pmoins);
-	}*/
+	public Literal getMaxGain(ArrayList<Cas> pos2, ArrayList<Cas> neg2){
+		ArrayList<Literal> list_l=new ArrayList<Literal>();//=ensembleDeCas.getListLiteraux();
+		int i=0;
+		for(Cas c:ensembleDeCas){
+			System.out.println(c);
+			for(int j = 0; j<c.getListLiteral().size()-1; j++){
+				boolean res=true;
+				for(Literal l2:list_l){
+					if(l2.equals(c.getListLiteral().get(j))){
+						res=false;
+					}
+				}
+				if(res){
+					list_l.add(c.getListLiteral().get(j));
+				}
+			}
+		}
+		for(Literal l : list_l)
+			System.out.println(l);
+		double max_gain=-1;
+		Literal best_l=null;
+		for(Literal l:list_l){
+			double res_gain=gain(l,ensembleDeCas,pos2,neg2);
+			if(res_gain>max_gain){
+				max_gain=res_gain;
+				best_l=l;
+			}
+		}
+		return best_l;
+	}
 
 	public static double log2(double x) {
 		return Math.log(x)/Math.log(2.0d);

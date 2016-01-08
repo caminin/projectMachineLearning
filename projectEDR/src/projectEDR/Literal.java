@@ -11,7 +11,18 @@ public class Literal {
 	
 	public String toString(){
 		String s = "";
-		s += attribut+"/"+valeur+"\n";
+		s += attribut+"/"+valeur;
 		return s;
+	}
+	
+	public boolean equals(Literal l){
+		boolean res;
+		if(l.attribut.equalsIgnoreCase(attribut)&&l.valeur.equalsIgnoreCase(valeur)){
+			res=true;
+		}
+		else{
+			res=false;
+		}
+		return res;
 	}
 }

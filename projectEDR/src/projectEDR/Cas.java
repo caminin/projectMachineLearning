@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Cas {
 	private boolean pos;
-	private Literal[] litteraux;
+	private ArrayList<Literal> litteraux;
 	private String attributResultat;
 
-	public Cas(Literal[] l, String ar){
-		litteraux = l;
+	public Cas(ArrayList<Literal> l, String ar){
+		litteraux=l;
 		attributResultat = ar;
 	}
 
@@ -22,22 +22,24 @@ public class Cas {
 
 	public String toString(){
 		String s = "";
-		for(int i = 0; i<litteraux.length; i++){
-			if(litteraux[i].equals(attributResultat)){
-				s+="|";
-			}
-			s += litteraux[i];
-			if(litteraux[i].equals(attributResultat)){
-				s+="|";
-			}
+		for(int i = 0; i<litteraux.size(); i++){
+			s += litteraux.get(i);
 			s+="  ";		
 		}
 		s+= getB();
 		s += "\n";
 		return s;
 	}
-
+	public int size(){
+		return litteraux.size();
+	}
 	public void setB(boolean b) {
 		pos = b;
+	}
+	
+	public ArrayList<Literal> getListLiteral(){return litteraux;}
+	
+	public Literal getLiteral(int index){
+		return litteraux.get(index);
 	}
 }
