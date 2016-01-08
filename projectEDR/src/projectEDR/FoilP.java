@@ -36,11 +36,11 @@ public class FoilP {
 		ensembleDeCas = new EnsembleDeCas(att, data.attribute(att.length-1).name());
 
 		//attribution des cas
-		String litt [];
+		Literal[] litt;
 		for(int i = 0; i<data.numInstances(); i++){
-			litt = new String[data.instance(i).numAttributes()];
+			litt = new Literal[data.instance(i).numAttributes()];
 			for(int j = 0; j<data.instance(i).numAttributes(); j++){
-				litt[j] = data.instance(i).stringValue(j);
+				litt[j] = new Literal(data.attribute(j).name(), data.instance(i).stringValue(j));
 			}
 			//ajoute un cas
 			// il faut comprendre ça : new Cas("sunny, cool, normal, FALSE, yes", "yes");
@@ -82,6 +82,8 @@ public class FoilP {
 				
 			}
 		}
+
+
 		return regles;
 	}
 
