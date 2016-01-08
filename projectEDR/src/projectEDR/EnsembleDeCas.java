@@ -30,6 +30,26 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 		}
 	}
 	
+	public ArrayList<Cas> getPos(){
+		ArrayList<Cas> pos = new ArrayList<Cas>();
+		for(Cas elem : this){
+			if(elem.getB()){
+				pos.add(elem);
+			}
+		}
+		return pos;
+	}
+	
+	public ArrayList<Cas> getNeg(){
+		ArrayList<Cas> pos = new ArrayList<Cas>();
+		for(Cas elem : this){
+			if(!elem.getB()){
+				pos.add(elem);
+			}
+		}
+		return pos;
+	}
+	
 	public int getNbCasPositif() {
 		//compter les cas positifs pour le calcul du gain
 		int nbCasPositif = 0;

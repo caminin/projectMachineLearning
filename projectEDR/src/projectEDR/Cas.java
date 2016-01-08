@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Cas {
 	private boolean pos;
-	private String[] litteraux;
+	private Literal[] litteraux;
 	private String attributResultat;
 
-	public Cas(String[] l, String ar){
+	public Cas(Literal[] l, String ar){
 		litteraux = l;
 		attributResultat = ar;
 	}

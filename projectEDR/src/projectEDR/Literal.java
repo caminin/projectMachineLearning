@@ -8,4 +8,10 @@ public class Literal {
 		attribut=_attribut;
 		valeur=_valeur;
 	}
+	
+	public String toString(){
+		String s = "";
+		s += attribut+"/"+valeur+"\n";
+		return s;
+	}
 }

@@ -12,8 +12,8 @@ public class FoilP {
 
 	//liste des + et -
 	// + = true, - = false
-	private int pos;
-	private int neg;
+	private ArrayList<Cas> pos;
+	private ArrayList<Cas> neg;
 
 	//ensemble des cas
 	private EnsembleDeCas ensembleDeCas;
@@ -21,8 +21,6 @@ public class FoilP {
 	//initialisation
 	public void init(String file){
 		regles = new ArrayList<Regle>();
-		pos = 0;
-		neg = 0;
 
 		//gestion lecture du fichier
 		//remplacer le paramètre avec un système d'ouverture de fichier
@@ -38,11 +36,11 @@ public class FoilP {
 		ensembleDeCas = new EnsembleDeCas(att, data.attribute(att.length-1).name());
 
 		//attribution des cas
-		String litt [];
+		Literal[] litt;
 		for(int i = 0; i<data.numInstances(); i++){
-			litt = new String[data.instance(i).numAttributes()];
+			litt = new Literal[data.instance(i).numAttributes()];
 			for(int j = 0; j<data.instance(i).numAttributes(); j++){
-				litt[j] = data.instance(i).stringValue(j);
+				litt[j] = new Literal(data.attribute(j).name(), data.instance(i).stringValue(j));
 			}
 			//ajoute un cas
 			// il faut comprendre ça : new Cas("sunny, cool, normal, FALSE, yes", "yes");
@@ -71,19 +69,28 @@ public class FoilP {
 		//Début
 		//Règles <- vide
 
-		Regle newRegle = new Regle(new ArrayList<Literal>(), true);
-		
 		//Tant que Pos différent d'ensemble vide
-		while(pos != 0){
-			
+		while(!pos.isEmpty()){
+			Regle newRegle = new Regle(new ArrayList<Literal>(), true);
+
+			//Neg2 <- Neg
+			//Pos2 <- Pos
+			ArrayList<Cas> neg2 = (ArrayList<Cas>) neg.clone();
+			ArrayList<Cas> pos2 = (ArrayList<Cas>) pos.clone();
+			//Tant que Neg2 différent d'ensemble vide
+			while(!neg2.isEmpty()){
+				
+			}
 		}
+
+
 		return regles;
 	}
 
 
 	private void learn() {
-		pos = ensembleDeCas.getNbCasPositif();
-		neg = ensembleDeCas.size() - pos;
+		pos = ensembleDeCas.getPos();
+		neg = ensembleDeCas.getNeg();
 	}
 
 	public EnsembleDeCas getEnsembleDeCas() {
