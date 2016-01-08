@@ -57,4 +57,7 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 	public String getAttributResultat() {
 		return attributResultat;
 	}
+	public String[] getAttributs() {
+		return attributs;
+	}
 }

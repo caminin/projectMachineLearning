@@ -90,8 +90,18 @@ public class FoilP {
 		return ensembleDeCas;
 	}
 
-	public static double gain(int nbPos, int nbNeg, EnsembleDeCas edc){
-		return nbPos*log2(nbPos/(nbPos+nbNeg)) - log2(edc.getNbCasPositif()/(edc.size()));
+	public static double gain(int index,EnsembleDeCas edc){
+		Cas mycas=edc.get(index);
+		
+		//mycas.nbPos*log2(nbPos/(nbPos+nbNeg)) - log2(edc.getNbCasPositif()/(edc.size()));
+		return 0;
+	}
+	
+	public int getMaxGain(){
+		for(int i=0;i<ensembleDeCas.getAttributs().length;i++){
+			
+		}
+		return 0;
 	}
 
 	/*public static double ent(int pplus, int pmoins){
