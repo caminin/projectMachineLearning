@@ -1,3 +1,4 @@
+package projectEDR;
 
 public class Literal {
 	public String attribut;

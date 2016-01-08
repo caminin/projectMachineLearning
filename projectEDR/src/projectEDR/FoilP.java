@@ -1,3 +1,5 @@
+package projectEDR;
+
 import java.util.ArrayList;
 
 import weka.core.Instances;
