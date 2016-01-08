@@ -15,7 +15,6 @@ public class myArffReader {
 			e.printStackTrace();
 		}	
 	}
-
 	public Instances getData(){
 		return data;
 	}
