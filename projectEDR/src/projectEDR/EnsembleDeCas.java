@@ -1,3 +1,4 @@
+package projectEDR;
 import java.util.ArrayList;
 public class EnsembleDeCas extends ArrayList<Cas>{
 	private int nbAttributs;
