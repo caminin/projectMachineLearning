@@ -12,7 +12,8 @@ public class FoilP {
 
 	//liste des + et -
 	// + = true, - = false
-	private ArrayList<Boolean> posAndNeg;
+	private int pos;
+	private int neg;
 
 	//ensemble des cas
 	private EnsembleDeCas ensembleDeCas;
@@ -20,7 +21,8 @@ public class FoilP {
 	//initialisation
 	public void init(String file){
 		regles = new ArrayList<Regle>();
-		posAndNeg = new ArrayList<Boolean>();
+		pos = 0;
+		neg = 0;
 
 		//gestion lecture du fichier
 		//remplacer le paramètre avec un système d'ouverture de fichier
@@ -63,8 +65,26 @@ public class FoilP {
 		System.out.println(foil.getEnsembleDeCas());
 	}
 
+	public ArrayList<Regle> algo(){
+		//Apprendre(Pos, Neg)
+		learn();
+		//Début
+		//Règles <- vide
+
+		Regle newRegle = new Regle(new ArrayList<Literal>(), true);
+		
+		//Tant que Pos différent d'ensemble vide
+		while(pos != 0){
+			
+		}
+		return regles;
+	}
 
 
+	private void learn() {
+		pos = ensembleDeCas.getNbCasPositif();
+		neg = ensembleDeCas.size() - pos;
+	}
 
 	public EnsembleDeCas getEnsembleDeCas() {
 		return ensembleDeCas;
