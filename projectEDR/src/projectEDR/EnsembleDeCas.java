@@ -18,7 +18,7 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 	public void determinePosNeg(){
 		String actuel = "";
 		String precedent = this.get(0).getAttributResultat();
-		this.get(0).setB(true);
+		this.get(0).setB(false);
 		for(int i = 1; i<this.size(); i++){
 			actuel = this.get(i).getAttributResultat();
 			if(!actuel.equals(precedent)){
@@ -75,40 +75,7 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 		return nbCasPositif;
 	}
 	
-	public int getNbPositif(Literal l){
-		int index=-1,nbPos=0;
-		for(int i=0;i<attributs.length;i++){
-			if(attributs[i].equalsIgnoreCase(l.attribut)){
-				index=i;
-			}
-		}
-		for(int i=0;i<this.size();i++){
-			if(this.get(i).getLiteral(index).equals(l)){
-				if(this.get(i).getB()){
-					nbPos++;
-				}
-			}
-		}
-		
-		return nbPos;
-	}
 	
-	public int getNbNegatif(Literal l){
-		int index=-1,nbNeg=0;
-		for(int i=0;i<attributs.length;i++){
-			if(attributs[i].equalsIgnoreCase(l.attribut)){
-				index=i;
-			}
-		}
-		for(int i=0;i<this.size();i++){
-			if(this.get(i).getLiteral(index).equals(l)){
-				if(!this.get(i).getB()){
-					nbNeg++;
-				}
-			}
-		}
-		return nbNeg;
-	}
 	
 	public String toString(){
 		String s = "Cas  ";

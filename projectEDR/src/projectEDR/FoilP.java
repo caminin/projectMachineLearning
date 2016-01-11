@@ -60,16 +60,36 @@ public class FoilP {
 	public static void main (String args[]){
 		FoilP foil = new FoilP();
 		foil.init("data.arff");
-		System.out.println(foil.getMaxGain(foil.getEnsembleDeCas().getPos(),foil.getEnsembleDeCas().getNeg()));
-		System.out.println(foil.getEnsembleDeCas());
+		for(Regle r:foil.algo(foil)){
+			System.out.println(r);
+		}
+	}
+	
+	private ArrayList<Cas> isOrNotSatisfied(ArrayList<Cas> ens_cas,boolean mustSatisfied,Literal literalCompare){
+		ArrayList<Cas> array_res=new ArrayList<>();
+		for(Cas c:ens_cas){
+			boolean isSatisfying=false;
+			for(Literal lit:c.getListLiteral()){
+				if(lit.equals(literalCompare)){
+					isSatisfying=true;
+				}
+			}
+			if(mustSatisfied==isSatisfying){
+				array_res.add(c);
+			}
+		}
+		return array_res;	
 	}
 
-	public ArrayList<Regle> algo(){
+	public ArrayList<Regle> algo(FoilP foil){
 		//Apprendre(Pos, Neg)
 		learn();
+		
+		for(Cas c:ensembleDeCas){
+			System.out.println(c);
+		}
 		//Début
 		//Règles <- vide
-
 		//Tant que Pos différent d'ensemble vide
 		while(!pos.isEmpty()){
 			Regle newRegle = new Regle(new ArrayList<Literal>(), true);
@@ -80,8 +100,40 @@ public class FoilP {
 			ArrayList<Cas> pos2 = (ArrayList<Cas>) pos.clone();
 			//Tant que Neg2 différent d'ensemble vide
 			while(!neg2.isEmpty()){
-
+				Literal l=foil.getMaxGain(pos2,neg2);
+				System.out.println("Je choisis le litéral "+l);
+				newRegle.add(l);
+				if(pos2.size()>0){
+					pos2=isOrNotSatisfied(pos2, true,l );
+				}
+				neg2=isOrNotSatisfied(neg2, true,l );
+				for(Cas c:neg2){
+					System.out.println(c);
+				}
+				for(Cas c:pos2){
+					System.out.println(c);
+				}
+				System.out.println();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			regles.add(newRegle);
+			for(Literal l:newRegle.getListLit()){
+				pos=isOrNotSatisfied(pos, false,l);
+			}
+			for(Cas c:pos){
+				System.out.println(c);
+			}
+			
+			for(Regle r: regles){
+				System.out.println(r);
+			}
+			System.out.println("________________________________");
+			
 		}
 
 
@@ -98,12 +150,19 @@ public class FoilP {
 		return ensembleDeCas;
 	}
 
-	public static double gain(Literal l,EnsembleDeCas edc,ArrayList<Cas> pos2, ArrayList<Cas> neg2){
+	public double gain(Literal l,ArrayList<Cas> pos2, ArrayList<Cas> neg2){
 		double nbPos=pos2.size();
 		double nbNeg=neg2.size();
-		double p=edc.getNbPositif(l);
-		double n=edc.getNbNegatif(l);
-		double gain = p*log2(p/(p+n)) - log2(nbPos/(nbPos+nbNeg));
+		double p=getNbPositiforNegatif(l,true,pos2,ensembleDeCas);
+		double n=getNbPositiforNegatif(l,false,neg2,ensembleDeCas);
+		double gain;
+		if(p==0){
+			gain=Double.NEGATIVE_INFINITY;
+		}
+		else{
+			gain= p*(log2(p/(p+n)) - log2(nbPos/(nbPos+nbNeg)));
+		}
+		 
 		System.out.println("gain de "+l+" : P:"+nbPos+" N:"+nbNeg+" p:"+p+" n:"+n+" val "+gain);
 		return gain;
 	}
@@ -112,7 +171,7 @@ public class FoilP {
 		ArrayList<Literal> list_l=new ArrayList<Literal>();//=ensembleDeCas.getListLiteraux();
 		int i=0;
 		for(Cas c:ensembleDeCas){
-			System.out.println(c);
+			//System.out.println(c);
 			for(int j = 0; j<c.getListLiteral().size()-1; j++){
 				boolean res=true;
 				for(Literal l2:list_l){
@@ -125,16 +184,23 @@ public class FoilP {
 				}
 			}
 		}
-		for(Literal l : list_l)
-			System.out.println(l);
+		/*for(Literal l : list_l)
+			System.out.println(l);*/
+		boolean init=true;
 		double max_gain=-1;
 		Literal best_l=null;
 		for(Literal l:list_l){
-			double res_gain=gain(l,ensembleDeCas,pos2,neg2);
-			if(res_gain>max_gain){
+			double res_gain=gain(l,pos2,neg2);
+			if(init){
 				max_gain=res_gain;
 				best_l=l;
+				init=false;
 			}
+			else if(res_gain>max_gain){//A CHANGER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				System.out.println("Je change de nombre");
+				max_gain=res_gain;
+				best_l=l;
+			}	
 		}
 		return best_l;
 	}
@@ -142,4 +208,23 @@ public class FoilP {
 	public static double log2(double x) {
 		return Math.log(x)/Math.log(2.0d);
 	}
+	
+	public int getNbPositiforNegatif(Literal l,boolean isPos,ArrayList<Cas> ensCas,EnsembleDeCas ensCasAttribut){
+		int index=-1,nbPos=0;
+		for(int i=0;i<ensCasAttribut.getAttributs().length;i++){
+			if(ensCasAttribut.getAttributs()[i].equalsIgnoreCase(l.attribut)){
+				index=i;
+			}
+		}
+		for(int i=0;i<ensCas.size();i++){
+			if(ensCas.get(i).getLiteral(index).equals(l)){
+				if(ensCas.get(i).getB()==isPos){
+					nbPos++;
+				}
+			}
+		}
+		
+		return nbPos;
+	}
+
 }

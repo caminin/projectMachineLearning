@@ -11,6 +11,7 @@ public class Cas {
 		litteraux=l;
 		attributResultat = ar;
 	}
+	
 
 	public boolean getB(){
 		return pos;
@@ -27,7 +28,6 @@ public class Cas {
 			s+="  ";		
 		}
 		s+= getB();
-		s += "\n";
 		return s;
 	}
 	public int size(){

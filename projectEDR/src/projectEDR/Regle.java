@@ -10,4 +10,23 @@ public class Regle {
 		lits = l;
 		conclusion = c;
 	}
+
+	public void add(Literal l){
+		lits.add(l);
+	}
+	
+	public ArrayList<Literal> getListLit(){
+		return lits;
+	}
+	
+	public String toString(){
+		String res="";
+		res="Règle : ";
+		for(Literal l:lits){
+			res=res+l;
+		}
+		res=res+" Conclusion : "+conclusion;
+		
+		return res;
+	}
 }
