@@ -11,11 +11,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -41,6 +43,8 @@ public class MyFrame extends JFrame implements ActionListener{
 		
 		button_run=new JButton("Lancer le test");
 		button_run.setVisible(false);
+		
+		affichage.setVisible(true);
 	}
 	
 	public void buildInterface(){
@@ -49,6 +53,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		
 		this.add(button_open, BorderLayout.NORTH);
 		this.add(affichage,BorderLayout.CENTER);
+		//this.add(tableau,BorderLayout.CENTER);
 		this.add(button_run, BorderLayout.SOUTH);
 		
 		Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
@@ -72,7 +77,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();            
             foil = new FoilP();
-    		foil.init(file.getAbsolutePath());
+    		foil.init("data.arff");//file.getAbsolutePath());
     		affichage.setText(foil.getEnsembleDeCas().toString());
     		
     		button_run.setVisible(true);
@@ -95,6 +100,13 @@ public class MyFrame extends JFrame implements ActionListener{
 			else {
 				b.setText("Retour");
 				//c'est là qu'on met le texte dans l'affichage avec l'aglo
+				String[] entetes = foil.getHeader();
+				ArrayList<Regle> res_regle=foil.algo(foil);
+				String s="";
+				for(Regle r:res_regle){
+					s=s+r+"\n";
+				}
+				affichage.setText(s);
 			}
 		}
 	}

@@ -60,9 +60,7 @@ public class FoilP {
 	public static void main (String args[]){
 		FoilP foil = new FoilP();
 		foil.init("data.arff");
-		for(Regle r:foil.algo(foil)){
-			System.out.println(r);
-		}
+		
 	}
 	
 	private ArrayList<Cas> isOrNotSatisfied(ArrayList<Cas> ens_cas,boolean mustSatisfied,Literal literalCompare){
@@ -85,9 +83,6 @@ public class FoilP {
 		//Apprendre(Pos, Neg)
 		learn();
 		
-		for(Cas c:ensembleDeCas){
-			System.out.println(c);
-		}
 		//Début
 		//Règles <- vide
 		//Tant que Pos différent d'ensemble vide
@@ -101,41 +96,17 @@ public class FoilP {
 			//Tant que Neg2 différent d'ensemble vide
 			while(!neg2.isEmpty()){
 				Literal l=foil.getMaxGain(pos2,neg2);
-				System.out.println("Je choisis le litéral "+l);
 				newRegle.add(l);
 				if(pos2.size()>0){
 					pos2=isOrNotSatisfied(pos2, true,l );
 				}
 				neg2=isOrNotSatisfied(neg2, true,l );
-				for(Cas c:neg2){
-					System.out.println(c);
-				}
-				for(Cas c:pos2){
-					System.out.println(c);
-				}
-				System.out.println();
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 			regles.add(newRegle);
 			for(Literal l:newRegle.getListLit()){
-				pos=isOrNotSatisfied(pos, false,l);
+				pos=isOrNotSatisfied(pos, false,l);			
 			}
-			for(Cas c:pos){
-				System.out.println(c);
-			}
-			
-			for(Regle r: regles){
-				System.out.println(r);
-			}
-			System.out.println("________________________________");
-			
 		}
-
 
 		return regles;
 	}
@@ -163,7 +134,7 @@ public class FoilP {
 			gain= p*(log2(p/(p+n)) - log2(nbPos/(nbPos+nbNeg)));
 		}
 		 
-		System.out.println("gain de "+l+" : P:"+nbPos+" N:"+nbNeg+" p:"+p+" n:"+n+" val "+gain);
+		//System.out.println("gain de "+l+" : P:"+nbPos+" N:"+nbNeg+" p:"+p+" n:"+n+" val "+gain);
 		return gain;
 	}
 
@@ -196,15 +167,17 @@ public class FoilP {
 				best_l=l;
 				init=false;
 			}
-			else if(res_gain>max_gain){//A CHANGER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				System.out.println("Je change de nombre");
+			else if(res_gain>max_gain){
+				//System.out.println("Je change de nombre");
 				max_gain=res_gain;
 				best_l=l;
 			}	
 		}
 		return best_l;
 	}
-
+	public String[] getHeader(){
+		return ensembleDeCas.getAttributs();
+	}
 	public static double log2(double x) {
 		return Math.log(x)/Math.log(2.0d);
 	}

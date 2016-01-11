@@ -24,7 +24,7 @@ public class Cas {
 	public String toString(){
 		String s = "";
 		for(int i = 0; i<litteraux.size(); i++){
-			s += litteraux.get(i);
+			s += litteraux.get(i).valeur;
 			s+="  ";		
 		}
 		s+= getB();

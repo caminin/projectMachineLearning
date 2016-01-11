@@ -19,11 +19,19 @@ public class Regle {
 		return lits;
 	}
 	
+	public boolean getConclusion(){
+		return conclusion;
+	}
+	
 	public String toString(){
 		String res="";
 		res="Règle : ";
-		for(Literal l:lits){
+		for(int i=0;i<lits.size();i++){
+			Literal l=lits.get(i);
 			res=res+l;
+			if(i<lits.size()-1){
+				res+=" AND ";
+			}
 		}
 		res=res+" Conclusion : "+conclusion;
 		

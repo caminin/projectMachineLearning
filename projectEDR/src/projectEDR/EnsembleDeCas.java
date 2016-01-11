@@ -80,12 +80,12 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 	public String toString(){
 		String s = "Cas  ";
 		for(int i = 0 ; i < attributs.length; i++){
-			s+=attributs[i]+"  ";
+			s=s+attributs[i]+"  ";
 		}
-		s += "\n";
+		s =s+ "\n";
 		int counter = 1;
 		for(Cas c : this){
-			s += counter +" "+ c;
+			s =s+ counter +" "+ c+"\n";
 			counter++;
 		}
 		return s;
