@@ -3,6 +3,7 @@ package projectEDR;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +13,13 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -24,7 +27,7 @@ import javax.swing.JTextField;
 public class MyFrame extends JFrame implements ActionListener{
 	
 	private JButton button_open;
-	private JTextArea affichage;
+	private JScrollPane affichage;
 	private JButton button_run;
 	private FoilP foil;
 	private static final long serialVersionUID = 1L;
@@ -38,7 +41,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	
 	public void buildComponent(){
 		button_open=new JButton("Ouvrir le fichier");
-		affichage=new JTextArea();
+		affichage=new JScrollPane();
 		affichage.setBackground(Color.WHITE);
 		
 		button_run=new JButton("Lancer le test");
@@ -71,18 +74,33 @@ public class MyFrame extends JFrame implements ActionListener{
 	}
 	
 	private void openFile(){
-		final JFileChooser fc = new JFileChooser();
+		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
 		int returnVal = fc.showOpenDialog(MyFrame.this);
 		
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();            
             foil = new FoilP();
-    		foil.init("data.arff");//file.getAbsolutePath());
-    		affichage.setText(foil.getEnsembleDeCas().toString());
-    		
+    		Vector<String> content=foil.init(file.getAbsolutePath());
+			Vector<String> columnNames = foil.getHeader();
+			
+			Vector<Vector> rowData = new Vector<Vector>();
+			for(int j=columnNames.size();j<content.size();j=j+columnNames.size()){
+				Vector<String> testing = new Vector<String>();
+				for(int i=0;i<columnNames.size();i++){
+					testing.add(content.get(j+i));
+				}
+				rowData.addElement(testing);
+			}	
+			
+			JTable table = new JTable(rowData, columnNames); 
+			this.remove(affichage);
+			affichage = new JScrollPane(table);
+			this.add(affichage,BorderLayout.CENTER);
+			affichage.setVisible(true);
+    		//affichage.setText(foil.getEnsembleDeCas().toString());
     		button_run.setVisible(true);
         } else {
-        	affichage.setText("Erreur lors de la lecture du fichier");
+        	//affichage.setText("Erreur lors de la lecture du fichier");
 		}
 	}
 	
@@ -94,19 +112,27 @@ public class MyFrame extends JFrame implements ActionListener{
 		}
 		else if (b.equals(this.button_run)){
 			if(b.getText().equals("Retour")){
-				affichage.setText("");
+				this.remove(affichage);
+				affichage=new JScrollPane();
+				this.add(affichage,BorderLayout.CENTER);
+				affichage.setVisible(true);
 				b.setText("Lancer le test");
+				repaint();
 			}
 			else {
+				this.remove(affichage);
 				b.setText("Retour");
 				//c'est là qu'on met le texte dans l'affichage avec l'aglo
-				String[] entetes = foil.getHeader();
 				ArrayList<Regle> res_regle=foil.algo(foil);
 				String s="";
 				for(Regle r:res_regle){
 					s=s+r+"\n";
 				}
-				affichage.setText(s);
+				JTextArea text=new JTextArea(s);
+				affichage=new JScrollPane(text);
+				this.add(affichage,BorderLayout.CENTER);
+				affichage.setVisible(true);
+				repaint();
 			}
 		}
 	}

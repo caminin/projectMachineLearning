@@ -1,6 +1,7 @@
 package projectEDR;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import weka.core.Instances;
 
@@ -19,7 +20,7 @@ public class FoilP {
 	private EnsembleDeCas ensembleDeCas;
 
 	//initialisation
-	public void init(String file){
+	public Vector<String> init(String file){
 		regles = new ArrayList<Regle>();
 
 		//gestion lecture du fichier
@@ -27,20 +28,20 @@ public class FoilP {
 		//+ vérification type de fichier et gestion exception
 		myArffReader reader = new myArffReader(file);
 		Instances data = reader.getData();
-
 		//attribution des attributs
 		String att [] = new String[data.numAttributes()];
 		for(int i = 0; i<att.length; i++){
 			att[i] = data.attribute(i).name();
 		}
 		ensembleDeCas = new EnsembleDeCas(att, data.attribute(att.length-1).name());
-
+		Vector<String> plop = new Vector<String>();
 		//attribution des cas
 		ArrayList<Literal> litt;
 		for(int i = 0; i<data.numInstances(); i++){
 			litt = new ArrayList<>();
 			for(int j = 0; j<data.instance(i).numAttributes(); j++){
 				litt.add(new Literal(data.attribute(j).name(), data.instance(i).stringValue(j)));
+				plop.addElement(data.instance(i).stringValue(j));
 			}
 			//ajoute un cas
 			// il faut comprendre ça : new Cas("sunny, cool, normal, FALSE, yes", "yes");
@@ -48,19 +49,12 @@ public class FoilP {
 			add(new Cas(litt, data.instance(i).stringValue(data.attribute(att.length-1))));
 		}
 		ensembleDeCas.determinePosNeg();
+		return plop;
 	}
 
 	//permet de rajouter un cas
 	public void add(Cas c){
 		ensembleDeCas.add(c);
-	}
-
-
-	//main
-	public static void main (String args[]){
-		FoilP foil = new FoilP();
-		foil.init("data.arff");
-		
 	}
 	
 	private ArrayList<Cas> isOrNotSatisfied(ArrayList<Cas> ens_cas,boolean mustSatisfied,Literal literalCompare){
@@ -175,7 +169,7 @@ public class FoilP {
 		}
 		return best_l;
 	}
-	public String[] getHeader(){
+	public Vector<String> getHeader(){
 		return ensembleDeCas.getAttributs();
 	}
 	public static double log2(double x) {
@@ -184,8 +178,8 @@ public class FoilP {
 	
 	public int getNbPositiforNegatif(Literal l,boolean isPos,ArrayList<Cas> ensCas,EnsembleDeCas ensCasAttribut){
 		int index=-1,nbPos=0;
-		for(int i=0;i<ensCasAttribut.getAttributs().length;i++){
-			if(ensCasAttribut.getAttributs()[i].equalsIgnoreCase(l.attribut)){
+		for(int i=0;i<ensCasAttribut.getAttributs().size();i++){
+			if(((String) ensCasAttribut.getAttributs().get(i)).equalsIgnoreCase(l.attribut)){
 				index=i;
 			}
 		}

@@ -1,5 +1,6 @@
 package projectEDR;
 import java.util.ArrayList;
+import java.util.Vector;
 public class EnsembleDeCas extends ArrayList<Cas>{
 	private int nbAttributs;
 	private String[] attributs;
@@ -18,7 +19,7 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 	public void determinePosNeg(){
 		String actuel = "";
 		String precedent = this.get(0).getAttributResultat();
-		this.get(0).setB(false);
+		this.get(0).setB(true);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		for(int i = 1; i<this.size(); i++){
 			actuel = this.get(i).getAttributResultat();
 			if(!actuel.equals(precedent)){
@@ -93,7 +94,11 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 	public String getAttributResultat() {
 		return attributResultat;
 	}
-	public String[] getAttributs() {
-		return attributs;
+	public Vector<String> getAttributs() {
+		Vector<String> res=new Vector();
+		for(String s:attributs){
+			res.add(s);
+		}
+		return res;
 	}
 }
