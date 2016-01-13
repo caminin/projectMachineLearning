@@ -86,13 +86,11 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 			rowData.addElement(testing);
 		}	
-		
 		JTable table = new JTable(rowData, columnNames); 
 		this.remove(affichage);
 		affichage = new JScrollPane(table);
 		this.add(affichage,BorderLayout.CENTER);
 		affichage.setVisible(true);
-		//affichage.setText(foil.getEnsembleDeCas().toString());
 		button_run.setVisible(true);
 		repaint();
 	}
@@ -101,7 +99,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
 		int returnVal = fc.showOpenDialog(MyFrame.this);
 		
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (returnVal != JFileChooser.ERROR_OPTION) {
             file = fc.getSelectedFile();            
             foil = new FoilP();
             paint();
