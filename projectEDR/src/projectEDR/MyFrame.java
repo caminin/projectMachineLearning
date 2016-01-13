@@ -29,6 +29,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	private JButton button_open;
 	private JScrollPane affichage;
 	private JButton button_run;
+	private JTextField field_select_attribute;
 	private FoilP foil;
 	File file;
 	private static final long serialVersionUID = 1L;
@@ -46,6 +47,9 @@ public class MyFrame extends JFrame implements ActionListener{
 		affichage.setBackground(Color.WHITE);
 		
 		button_run=new JButton("Lancer le test");
+		field_select_attribute = new JTextField("attribut +",20);
+		
+		field_select_attribute.setVisible(true);
 		button_run.setVisible(false);
 		
 		affichage.setVisible(true);
@@ -58,6 +62,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		this.add(button_open, BorderLayout.NORTH);
 		this.add(affichage,BorderLayout.CENTER);
 		//this.add(tableau,BorderLayout.CENTER);
+		this.add(field_select_attribute, BorderLayout.EAST);
 		this.add(button_run, BorderLayout.SOUTH);
 		
 		Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
@@ -75,7 +80,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	}
 	
 	private void paint(){
-		Vector<String> content=foil.init(file.getAbsolutePath());
+		Vector<String> content=foil.init(file.getAbsolutePath(), field_select_attribute.getText());
 		Vector<String> columnNames = foil.getHeader();
 		
 		Vector<Vector> rowData = new Vector<Vector>();
@@ -102,6 +107,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		if (returnVal != JFileChooser.ERROR_OPTION) {
             file = fc.getSelectedFile();            
             foil = new FoilP();
+            field_select_attribute.setVisible(false);
             paint();
     		
         } else {

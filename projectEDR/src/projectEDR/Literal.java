@@ -1,8 +1,8 @@
 package projectEDR;
 
 public class Literal {
-	public String attribut="";
-	public String valeur="";
+	private String attribut="";
+	private String valeur="";
 	
 	public Literal(String _attribut, String _valeur){
 		attribut=_attribut;
@@ -13,6 +13,14 @@ public class Literal {
 		String s = "";
 		s += attribut+"/"+valeur;
 		return s;
+	}
+	
+	public String getAttribute(){
+		return attribut;
+	}
+	
+	public String getValue(){
+		return valeur;
 	}
 	
 	public boolean equals(Literal l){

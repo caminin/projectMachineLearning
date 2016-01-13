@@ -20,7 +20,7 @@ public class FoilP {
 	private EnsembleDeCas ensembleDeCas;
 
 	//initialisation
-	public Vector<String> init(String file){
+	public Vector<String> init(String file, String attributePositive){
 		regles = new ArrayList<Regle>();
 
 		//gestion lecture du fichier
@@ -48,7 +48,7 @@ public class FoilP {
 			// en gros je précise si ça sera un négatif ou un positif
 			add(new Cas(litt, data.instance(i).stringValue(data.attribute(att.length-1))));
 		}
-		ensembleDeCas.determinePosNeg();
+		ensembleDeCas.determinePosNeg(attributePositive);
 		return plop;
 	}
 
@@ -179,7 +179,7 @@ public class FoilP {
 	public int getNbPositiforNegatif(Literal l,boolean isPos,ArrayList<Cas> ensCas,EnsembleDeCas ensCasAttribut){
 		int index=-1,nbPos=0;
 		for(int i=0;i<ensCasAttribut.getAttributs().size();i++){
-			if(((String) ensCasAttribut.getAttributs().get(i)).equalsIgnoreCase(l.attribut)){
+			if(((String) ensCasAttribut.getAttributs().get(i)).equalsIgnoreCase(l.getAttribute())){
 				index=i;
 			}
 		}

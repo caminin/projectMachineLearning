@@ -11,12 +11,12 @@ public class Cas {
 		litteraux=l;
 		attributResultat = ar;
 	}
-	
+
 
 	public boolean getB(){
 		return pos;
 	}
-	
+
 	public String getAttributResultat(){
 		return attributResultat;
 	}
@@ -24,7 +24,7 @@ public class Cas {
 	public String toString(){
 		String s = "";
 		for(int i = 0; i<litteraux.size(); i++){
-			s += litteraux.get(i).valeur;
+			s += litteraux.get(i).getValue();
 			s+="  ";		
 		}
 		s+= getB();
@@ -36,10 +36,22 @@ public class Cas {
 	public void setB(boolean b) {
 		pos = b;
 	}
-	
+
 	public ArrayList<Literal> getListLiteral(){return litteraux;}
-	
+
 	public Literal getLiteral(int index){
 		return litteraux.get(index);
 	}
+
+	/*public String getValueOfResultAttribute(){
+		String res = "";
+		for(int i = 0; i< litteraux.size(); i++){
+			System.out.println(attributResultat);
+			if((litteraux.get(i).getAttribute()).equals(attributResultat)){
+				res = litteraux.get(i).getValue();
+				break;
+			}
+		}
+		return res;
+	}*/
 }
