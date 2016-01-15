@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -26,11 +27,13 @@ import javax.swing.JTextField;
 
 public class MyFrame extends JFrame implements ActionListener{
 	
+	private Box button_box;
 	private JButton button_open;
+	private JButton button_config;
 	private JScrollPane affichage;
 	private JButton button_run;
-	private JTextField field_select_attribute;
 	private FoilP foil;
+	private String attributPositive;
 	File file;
 	private static final long serialVersionUID = 1L;
 
@@ -42,14 +45,17 @@ public class MyFrame extends JFrame implements ActionListener{
 	}
 	
 	public void buildComponent(){
+		attributPositive="";
+		button_box=Box.createHorizontalBox();;
 		button_open=new JButton("Ouvrir le fichier");
+		button_config=new JButton("Choisir la conclusion");
+		button_box.add(button_config);
+		button_box.add(button_open);
+		
 		affichage=new JScrollPane();
-		affichage.setBackground(Color.WHITE);
 		
 		button_run=new JButton("Lancer le test");
-		field_select_attribute = new JTextField("attribut +",20);
 		
-		field_select_attribute.setVisible(true);
 		button_run.setVisible(false);
 		
 		affichage.setVisible(true);
@@ -59,10 +65,9 @@ public class MyFrame extends JFrame implements ActionListener{
 		BorderLayout bl = new BorderLayout();
 		this.setLayout(bl);
 		
-		this.add(button_open, BorderLayout.NORTH);
+		this.add(button_box, BorderLayout.NORTH);
 		this.add(affichage,BorderLayout.CENTER);
-		//this.add(tableau,BorderLayout.CENTER);
-		this.add(field_select_attribute, BorderLayout.EAST);
+
 		this.add(button_run, BorderLayout.SOUTH);
 		
 		Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
@@ -76,11 +81,12 @@ public class MyFrame extends JFrame implements ActionListener{
 	private void buildEvents() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.button_open.addActionListener(this);
+		this.button_config.addActionListener(this);
 		this.button_run.addActionListener(this);
 	}
 	
 	private void paint(){
-		Vector<String> content=foil.init(file.getAbsolutePath(), field_select_attribute.getText());
+		Vector<String> content=foil.init(file.getAbsolutePath(), attributPositive);
 		Vector<String> columnNames = foil.getHeader();
 		
 		Vector<Vector> rowData = new Vector<Vector>();
@@ -107,7 +113,6 @@ public class MyFrame extends JFrame implements ActionListener{
 		if (returnVal != JFileChooser.ERROR_OPTION) {
             file = fc.getSelectedFile();            
             foil = new FoilP();
-            field_select_attribute.setVisible(false);
             paint();
     		
         } else {
@@ -145,6 +150,22 @@ public class MyFrame extends JFrame implements ActionListener{
 				affichage.setVisible(true);
 				repaint();
 			}
+		}
+		else if(b.equals(this.button_config)){
+			Vector<String> columnNames = foil.getHeader();
+			String s=columnNames.elementAt(columnNames.size()-1);
+			Vector<String> list_res=new Vector<>();
+			list_res.add(s);
+			ArrayList<Cas> ens_cas=foil.getEnsembleDeCas();
+			
+			for(Cas c:ens_cas){
+				String att=c.getAttributResultat();
+				if(list_res.contains(att)==false){
+					list_res.add(att);
+				}
+			}
+			
+			ConfigFrame frame=new ConfigFrame(list_res);
 		}
 	}
 		
