@@ -111,7 +111,11 @@ public class MyFrame extends JFrame implements ActionListener{
             paint();
     		
         } else {
-        	//affichage.setText("Erreur lors de la lecture du fichier");
+        	this.remove(affichage);
+    		JTextArea text=new JTextArea("Erreur lors de la lecture du fichier");
+			affichage=new JScrollPane(text);
+    		this.add(affichage,BorderLayout.CENTER);
+    		affichage.setVisible(true);
 		}
 	}
 	

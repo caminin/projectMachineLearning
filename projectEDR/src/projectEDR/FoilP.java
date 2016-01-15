@@ -57,7 +57,30 @@ public class FoilP {
 		ensembleDeCas.add(c);
 	}
 	
-	private ArrayList<Cas> isOrNotSatisfied(ArrayList<Cas> ens_cas,boolean mustSatisfied,Literal literalCompare){
+	private ArrayList<Cas> retireCasDifferent(ArrayList<Cas> ens_cas,ArrayList<Literal> listLiteralCompare){
+		ArrayList<Cas> array_res=new ArrayList<>();
+		for(Cas c:ens_cas){
+			boolean dontAdd=true;
+			for(Literal literalCompare:listLiteralCompare){//on parcours tous les littéraux à comparer
+				boolean isContenu=false;
+				for(Literal lit:c.getListLiteral()){//on parcours tous les littéraux du cas
+					if(literalCompare.equals(lit)){
+						isContenu=true;
+					}
+				}
+				if(isContenu==false){
+					dontAdd=false;
+				}
+				
+			}
+			if(dontAdd==false){
+				array_res.add(c);
+			}
+		}
+		return array_res;	
+	}
+	
+	private ArrayList<Cas> retireCasEgaux(ArrayList<Cas> ens_cas,Literal literalCompare){
 		ArrayList<Cas> array_res=new ArrayList<>();
 		for(Cas c:ens_cas){
 			boolean isSatisfying=false;
@@ -66,7 +89,7 @@ public class FoilP {
 					isSatisfying=true;
 				}
 			}
-			if(mustSatisfied==isSatisfying){
+			if(isSatisfying==true){
 				array_res.add(c);
 			}
 		}
@@ -91,15 +114,11 @@ public class FoilP {
 			while(!neg2.isEmpty()){
 				Literal l=foil.getMaxGain(pos2,neg2);
 				newRegle.add(l);
-				if(pos2.size()>0){
-					pos2=isOrNotSatisfied(pos2, true,l );
-				}
-				neg2=isOrNotSatisfied(neg2, true,l );
+				pos2=retireCasEgaux(pos2,l);
+				neg2=retireCasEgaux(neg2,l);
 			}
 			regles.add(newRegle);
-			for(Literal l:newRegle.getListLit()){
-				pos=isOrNotSatisfied(pos, false,l);			
-			}
+			pos=retireCasDifferent(pos,newRegle.getListLit());
 		}
 
 		return regles;
@@ -128,7 +147,6 @@ public class FoilP {
 			gain= p*(log2(p/(p+n)) - log2(nbPos/(nbPos+nbNeg)));
 		}
 		 
-		//System.out.println("gain de "+l+" : P:"+nbPos+" N:"+nbNeg+" p:"+p+" n:"+n+" val "+gain);
 		return gain;
 	}
 
@@ -136,7 +154,6 @@ public class FoilP {
 		ArrayList<Literal> list_l=new ArrayList<Literal>();//=ensembleDeCas.getListLiteraux();
 		int i=0;
 		for(Cas c:ensembleDeCas){
-			//System.out.println(c);
 			for(int j = 0; j<c.getListLiteral().size()-1; j++){
 				boolean res=true;
 				for(Literal l2:list_l){
@@ -149,8 +166,6 @@ public class FoilP {
 				}
 			}
 		}
-		/*for(Literal l : list_l)
-			System.out.println(l);*/
 		boolean init=true;
 		double max_gain=-1;
 		Literal best_l=null;
@@ -162,7 +177,6 @@ public class FoilP {
 				init=false;
 			}
 			else if(res_gain>max_gain){
-				//System.out.println("Je change de nombre");
 				max_gain=res_gain;
 				best_l=l;
 			}	
