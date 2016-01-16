@@ -32,7 +32,6 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 			precedent = actuel;
 		}*/
 		for(int i = 0; i<this.size(); i++){
-			System.out.println((this.get(i)));
 			if((this.get(i).getAttributResultat()).equals(attributePositif)){
 				this.get(i).setB(true);
 			}else{

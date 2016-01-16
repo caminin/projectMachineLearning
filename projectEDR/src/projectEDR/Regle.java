@@ -23,7 +23,7 @@ public class Regle {
 		return conclusion;
 	}
 	
-	public String toString(){
+	public String toString(String conclusion){
 		String res="";
 		res="Règle : ";
 		for(int i=0;i<lits.size();i++){
@@ -33,7 +33,7 @@ public class Regle {
 				res+=" AND ";
 			}
 		}
-		res=res+" Conclusion : "+conclusion;
+		res=res+"\n\t Conclusion : "+conclusion+"\n";
 		
 		return res;
 	}

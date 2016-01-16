@@ -19,6 +19,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -30,6 +31,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	private Box button_box;
 	private JButton button_open;
 	private JButton button_config;
+	private JLabel affichage_att;
 	private JScrollPane affichage;
 	private JButton button_run;
 	private FoilP foil;
@@ -49,14 +51,18 @@ public class MyFrame extends JFrame implements ActionListener{
 		button_box=Box.createHorizontalBox();;
 		button_open=new JButton("Ouvrir le fichier");
 		button_config=new JButton("Choisir la conclusion");
-		button_box.add(button_config);
+		affichage_att=new JLabel();
+		
 		button_box.add(button_open);
+		button_box.add(button_config);
+		button_box.add(affichage_att);
 		
 		affichage=new JScrollPane();
 		
 		button_run=new JButton("Lancer le test");
 		
 		button_run.setVisible(false);
+		button_config.setVisible(false);
 		
 		affichage.setVisible(true);
 	}
@@ -85,8 +91,17 @@ public class MyFrame extends JFrame implements ActionListener{
 		this.button_run.addActionListener(this);
 	}
 	
+	public String getAttributPos(){
+		Vector<String> columnNames = foil.getHeader();
+		String s=columnNames.elementAt(columnNames.size()-1);
+		return s;
+	}
+	
 	public void setAttribut(String att){
 		attributPositive=att;
+		String s=getAttributPos();
+		affichage_att.setText("Conclusion : "+s+" = "+att);
+		repaint();
 	}
 	
 	private void paint(){
@@ -119,7 +134,9 @@ public class MyFrame extends JFrame implements ActionListener{
 		if (returnVal != JFileChooser.ERROR_OPTION) {
             file = fc.getSelectedFile();            
             foil = new FoilP();
+            button_config.setVisible(true);
             paint();
+            callConfig();
     		
         } else {
         	this.remove(affichage);
@@ -149,7 +166,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				ArrayList<Regle> res_regle=foil.algo(foil);
 				String s="";
 				for(Regle r:res_regle){
-					s=s+r+"\n";
+					s=s+r.toString(getAttributPos()+" = "+attributPositive)+"\n";
 				}
 				JTextArea text=new JTextArea(s);
 				affichage=new JScrollPane(text);
@@ -159,21 +176,24 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 		}
 		else if(b.equals(this.button_config)){
-			Vector<String> columnNames = foil.getHeader();
-			String s=columnNames.elementAt(columnNames.size()-1);
-			Vector<String> list_res=new Vector<>();
-			list_res.add(s);
-			ArrayList<Cas> ens_cas=foil.getEnsembleDeCas();
-			
-			for(Cas c:ens_cas){
-				String att=c.getAttributResultat();
-				if(list_res.contains(att)==false){
-					list_res.add(att);
-				}
-			}
-			
-			ConfigFrame frame=new ConfigFrame(list_res,this);
+			callConfig();
 		}
+	}
+	
+	public void callConfig(){
+		String s=getAttributPos();
+		Vector<String> list_res=new Vector<>();
+		list_res.add(s);
+		ArrayList<Cas> ens_cas=foil.getEnsembleDeCas();
+		
+		for(Cas c:ens_cas){
+			String att=c.getAttributResultat();
+			if(list_res.contains(att)==false){
+				list_res.add(att);
+			}
+		}
+		
+		ConfigFrame frame=new ConfigFrame(list_res,this);
 	}
 		
 }

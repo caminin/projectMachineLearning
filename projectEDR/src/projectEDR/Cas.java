@@ -46,7 +46,6 @@ public class Cas {
 	/*public String getValueOfResultAttribute(){
 		String res = "";
 		for(int i = 0; i< litteraux.size(); i++){
-			System.out.println(attributResultat);
 			if((litteraux.get(i).getAttribute()).equals(attributResultat)){
 				res = litteraux.get(i).getValue();
 				break;
