@@ -23,10 +23,12 @@ public class ConfigFrame extends JFrame implements ActionListener{
 	private Box box_contenu;
 	private Box box_bouttons;
 	private Vector<String> list_res;
+	private MyFrame fenetre;
 	
 	
-	public ConfigFrame(Vector<String> _list_res){
+	public ConfigFrame(Vector<String> _list_res,MyFrame _fenetre){
 		super("Choisissez la valeur de la conclusion");
+		fenetre=_fenetre;
 		list_res=_list_res;
 		buildComponent();
 		buildEvents();
@@ -70,6 +72,8 @@ public class ConfigFrame extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		String value=entree.getText();
+		this.dispose();
+		fenetre.setAttribut(value);
 	}
 }

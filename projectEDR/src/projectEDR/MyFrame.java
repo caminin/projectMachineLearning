@@ -34,7 +34,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	private JButton button_run;
 	private FoilP foil;
 	private String attributPositive;
-	File file;
+	private File file;
 	private static final long serialVersionUID = 1L;
 
 	public MyFrame(){
@@ -85,25 +85,31 @@ public class MyFrame extends JFrame implements ActionListener{
 		this.button_run.addActionListener(this);
 	}
 	
+	public void setAttribut(String att){
+		attributPositive=att;
+	}
+	
 	private void paint(){
-		Vector<String> content=foil.init(file.getAbsolutePath(), attributPositive);
-		Vector<String> columnNames = foil.getHeader();
-		
-		Vector<Vector> rowData = new Vector<Vector>();
-		for(int j=columnNames.size();j<content.size();j=j+columnNames.size()){
-			Vector<String> testing = new Vector<String>();
-			for(int i=0;i<columnNames.size();i++){
-				testing.add(content.get(j+i));
-			}
-			rowData.addElement(testing);
+		if(file!=null){
+			Vector<String> content=foil.init(file.getAbsolutePath(), attributPositive);
+			Vector<String> columnNames = foil.getHeader();
+			
+			Vector<Vector> rowData = new Vector<Vector>();
+			for(int j=columnNames.size();j<content.size();j=j+columnNames.size()){
+				Vector<String> testing = new Vector<String>();
+				for(int i=0;i<columnNames.size();i++){
+					testing.add(content.get(j+i));
+				}
+				rowData.addElement(testing);
+			}	
+			JTable table = new JTable(rowData, columnNames); 
+			this.remove(affichage);
+			affichage = new JScrollPane(table);
+			this.add(affichage,BorderLayout.CENTER);
+			affichage.setVisible(true);
+			button_run.setVisible(true);
+			repaint();
 		}	
-		JTable table = new JTable(rowData, columnNames); 
-		this.remove(affichage);
-		affichage = new JScrollPane(table);
-		this.add(affichage,BorderLayout.CENTER);
-		affichage.setVisible(true);
-		button_run.setVisible(true);
-		repaint();
 	}
 	
 	private void openFile(){
@@ -136,6 +142,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				paint();
 			}
 			else {
+				paint();
 				this.remove(affichage);
 				b.setText("Retour");
 				//c'est là qu'on met le texte dans l'affichage avec l'aglo
@@ -165,7 +172,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				}
 			}
 			
-			ConfigFrame frame=new ConfigFrame(list_res);
+			ConfigFrame frame=new ConfigFrame(list_res,this);
 		}
 	}
 		
