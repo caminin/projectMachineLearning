@@ -57,46 +57,50 @@ public class FoilP {
 		ensembleDeCas.add(c);
 	}
 	
+	//retourne un arraylist contenant les cas qui n'ont pas listLiteralCompare comme littéraux
 	private ArrayList<Cas> retireCasDifferent(ArrayList<Cas> ens_cas,ArrayList<Literal> listLiteralCompare){
 		ArrayList<Cas> array_res=new ArrayList<>();
 		for(Cas c:ens_cas){
-			boolean dontAdd=true;
+			boolean mustAdd=false;
 			for(Literal literalCompare:listLiteralCompare){//on parcours tous les littéraux à comparer
 				boolean isContenu=false;
 				for(Literal lit:c.getListLiteral()){//on parcours tous les littéraux du cas
-					if(literalCompare.equals(lit)){
+					if(literalCompare.equals(lit)){//si le litéral à un équivalent dans le cas
 						isContenu=true;
 					}
 				}
-				if(isContenu==false){
-					dontAdd=false;
+				if(isContenu==false){//si l'élément n'est pas contenu dans cas
+					mustAdd=true;//on ajoute 
 				}
 				
 			}
-			if(dontAdd==false){
+			if(mustAdd==true){// si on doit ajouter on le fait là
 				array_res.add(c);
 			}
 		}
 		return array_res;	
 	}
 	
+	//retourne un arraylist contenant les éléments dans ens_cas qui ont literalCompare dans leur littéraux
 	private ArrayList<Cas> retireCasEgaux(ArrayList<Cas> ens_cas,Literal literalCompare){
 		ArrayList<Cas> array_res=new ArrayList<>();
 		for(Cas c:ens_cas){
 			boolean isSatisfying=false;
 			for(Literal lit:c.getListLiteral()){
-				if(lit.equals(literalCompare)){
+				if(lit.equals(literalCompare)){// si l'élément a un équivalent dans le cas
 					isSatisfying=true;
 				}
 			}
-			if(isSatisfying==true){
+			if(isSatisfying==true){//on l'ajoute ici
 				array_res.add(c);
 			}
 		}
 		return array_res;	
 	}
-
-	public ArrayList<Regle> algo(FoilP foil){
+	
+	
+//Permet d'appliquer l'algo FoilP
+	public ArrayList<Regle> algo(){
 		//Apprendre(Pos, Neg)
 		learn();
 		
@@ -112,19 +116,19 @@ public class FoilP {
 			ArrayList<Cas> pos2 = (ArrayList<Cas>) pos.clone();
 			//Tant que Neg2 différent d'ensemble vide
 			while(!neg2.isEmpty()){
-				Literal l=foil.getMaxGain(pos2,neg2);
+				Literal l=getMaxGain(pos2,neg2);
 				newRegle.add(l);
-				pos2=retireCasEgaux(pos2,l);
-				neg2=retireCasEgaux(neg2,l);
+				pos2=retireCasEgaux(pos2,l);//on garde les cas qui ont l dans pos2
+				neg2=retireCasEgaux(neg2,l);//même chose dans neg2
 			}
-			regles.add(newRegle);
-			pos=retireCasDifferent(pos,newRegle.getListLit());
+			regles.add(newRegle);//on ajoute la règle
+			pos=retireCasDifferent(pos,newRegle.getListLit());//on retire dans pos les éléments qui ont les littéraux de la nouvelle règle en littéral
 		}
 
 		return regles;
 	}
 
-
+	
 	private void learn() {
 		pos = ensembleDeCas.getPos();
 		neg = ensembleDeCas.getNeg();
@@ -134,6 +138,7 @@ public class FoilP {
 		return ensembleDeCas;
 	}
 
+	//Calcul le gain d'un littéral
 	public double gain(Literal l,ArrayList<Cas> pos2, ArrayList<Cas> neg2){
 		double nbPos=pos2.size();
 		double nbNeg=neg2.size();
@@ -149,11 +154,12 @@ public class FoilP {
 		 
 		return gain;
 	}
-
+	
+	//retourne le littéral qui a le meilleur gain
 	public Literal getMaxGain(ArrayList<Cas> pos2, ArrayList<Cas> neg2){
 		ArrayList<Literal> list_l=new ArrayList<Literal>();//=ensembleDeCas.getListLiteraux();
 		int i=0;
-		for(Cas c:ensembleDeCas){
+		for(Cas c:ensembleDeCas){//On récupère tous les littéraux différents en un seul exemplaire
 			for(int j = 0; j<c.getListLiteral().size()-1; j++){
 				boolean res=true;
 				for(Literal l2:list_l){
@@ -186,10 +192,13 @@ public class FoilP {
 	public Vector<String> getHeader(){
 		return ensembleDeCas.getAttributs();
 	}
+	
+	//calcul le log
 	public static double log2(double x) {
 		return Math.log(x)/Math.log(2.0d);
 	}
 	
+	//Retourne le nombre d'élément qui ont isPos en conclusion et l en littéral
 	public int getNbPositiforNegatif(Literal l,boolean isPos,ArrayList<Cas> ensCas,EnsembleDeCas ensCasAttribut){
 		int index=-1,nbPos=0;
 		for(int i=0;i<ensCasAttribut.getAttributs().size();i++){
@@ -204,7 +213,6 @@ public class FoilP {
 				}
 			}
 		}
-		
 		return nbPos;
 	}
 

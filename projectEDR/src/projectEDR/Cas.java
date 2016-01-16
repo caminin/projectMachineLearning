@@ -42,15 +42,4 @@ public class Cas {
 	public Literal getLiteral(int index){
 		return litteraux.get(index);
 	}
-
-	/*public String getValueOfResultAttribute(){
-		String res = "";
-		for(int i = 0; i< litteraux.size(); i++){
-			if((litteraux.get(i).getAttribute()).equals(attributResultat)){
-				res = litteraux.get(i).getValue();
-				break;
-			}
-		}
-		return res;
-	}*/
 }

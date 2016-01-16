@@ -18,19 +18,6 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 	//à partir des données, assigne le positif et le négatif (true, false)
 	public void determinePosNeg(String attributePositif){
 		
-		
-		/*String actuel = "";
-		String precedent = this.get(0).getAttributResultat();
-		this.get(0).setB(true);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		for(int i = 1; i<this.size(); i++){
-			actuel = this.get(i).getAttributResultat();
-			if(!actuel.equals(precedent)){
-				this.get(i).setB(!this.get(i-1).getB());
-			}else{
-				this.get(i).setB(this.get(i-1).getB());
-			}
-			precedent = actuel;
-		}*/
 		for(int i = 0; i<this.size(); i++){
 			if((this.get(i).getAttributResultat()).equals(attributePositif)){
 				this.get(i).setB(true);
@@ -49,9 +36,7 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 				}
 			}
 		}
-		
 		return list_l;
-		
 	}
 	
 	public ArrayList<Cas> getPos(){

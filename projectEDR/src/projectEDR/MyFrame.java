@@ -131,20 +131,14 @@ public class MyFrame extends JFrame implements ActionListener{
 		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
 		int returnVal = fc.showOpenDialog(MyFrame.this);
 		
-		if (returnVal != JFileChooser.ERROR_OPTION) {
+		if (returnVal == JFileChooser.FILES_ONLY) {
             file = fc.getSelectedFile();            
             foil = new FoilP();
             button_config.setVisible(true);
             paint();
             callConfig();
     		
-        } else {
-        	this.remove(affichage);
-    		JTextArea text=new JTextArea("Erreur lors de la lecture du fichier");
-			affichage=new JScrollPane(text);
-    		this.add(affichage,BorderLayout.CENTER);
-    		affichage.setVisible(true);
-		}
+        }
 	}
 	
 	@Override
@@ -163,7 +157,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				this.remove(affichage);
 				b.setText("Retour");
 				//c'est là qu'on met le texte dans l'affichage avec l'aglo
-				ArrayList<Regle> res_regle=foil.algo(foil);
+				ArrayList<Regle> res_regle=foil.algo();
 				String s="";
 				for(Regle r:res_regle){
 					s=s+r.toString(getAttributPos()+" = "+attributPositive)+"\n";
