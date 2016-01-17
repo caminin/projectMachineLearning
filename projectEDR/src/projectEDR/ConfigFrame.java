@@ -25,7 +25,7 @@ public class ConfigFrame extends JFrame implements ActionListener{
 	private Vector<String> list_res;
 	private MyFrame fenetre;
 	
-	
+	//COnstructeur
 	public ConfigFrame(Vector<String> _list_res,MyFrame _fenetre){
 		super("Choisissez la valeur de la conclusion");
 		fenetre=_fenetre;
@@ -35,25 +35,26 @@ public class ConfigFrame extends JFrame implements ActionListener{
 		buildInterface();
 	}
 	
+	//Construits les composants 
 	public void buildComponent(){
 		button_open=new JButton("Envoyer");
 		affichage=new JScrollPane(new JTextArea("plop"));
 		box_contenu=Box.createVerticalBox();
 		box_bouttons=Box.createHorizontalBox();
 		entree=new JTextField();
+		JTable table=new JTable(null,list_res);
+		affichage=new JScrollPane(table);
 	}
 	
+	//Ajoute le listener
 	public void buildEvents(){
 		this.button_open.addActionListener(this);
 	}
 	
+	//
 	public void buildInterface(){
 		BorderLayout bl = new BorderLayout();
 		this.setLayout(bl);
-		
-		JTable table=new JTable(null,list_res);
-		affichage=new JScrollPane(table);
-		affichage.setVisible(true);
 		
 		box_bouttons.add(entree);
 		box_bouttons.add(button_open);
@@ -61,14 +62,17 @@ public class ConfigFrame extends JFrame implements ActionListener{
 		box_contenu.add(affichage);
 		box_contenu.add(box_bouttons);
 		
-		this.add(box_contenu);	
+		this.add(box_contenu);
+		
 		Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((int)tailleEcran.getWidth()/3,(int)tailleEcran.getHeight()/5);
 		this.setSize((int)tailleEcran.getWidth()/6,(int)tailleEcran.getHeight()/8);
 		
 		setVisible(true);
+		affichage.setVisible(true);
 	}
-
+	
+	//Actions des listeners
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub

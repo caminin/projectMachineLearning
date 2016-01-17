@@ -85,9 +85,11 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 		}
 		return s;
 	}
+	
 	public String getAttributResultat() {
 		return attributResultat;
 	}
+	
 	public Vector<String> getAttributs() {
 		Vector<String> res=new Vector();
 		for(String s:attributs){
