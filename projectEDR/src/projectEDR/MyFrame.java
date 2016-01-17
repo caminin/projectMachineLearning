@@ -71,8 +71,8 @@ public class MyFrame extends JFrame implements ActionListener{
 		this.add(button_run, BorderLayout.SOUTH);
 		
 		Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation((int)tailleEcran.getWidth()/3,(int)tailleEcran.getHeight()/5);
-		this.setSize((int)tailleEcran.getWidth()/3,(int)tailleEcran.getHeight()/2);
+		this.setLocation((int)tailleEcran.getWidth()/4,(int)tailleEcran.getHeight()/5);
+		this.setSize((int)tailleEcran.getWidth()/2,(int)(tailleEcran.getHeight()/1.5));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -156,11 +156,11 @@ public class MyFrame extends JFrame implements ActionListener{
 				this.remove(affichage);
 				b.setText("Retour");
 				HashMap<Regle,Integer> res_regle=foil.algo();
-				String s="";
 				Set<Regle> cles = res_regle.keySet();
 				Iterator<Regle> it = cles.iterator();
+				String s="La conclusion a été couverte avec "+cles.size()+" règles :"+"\n"+"\n";
 				while(it.hasNext()){
-					Regle cle = (Regle) it.next();
+					Regle cle = it.next();
 					int valeur = res_regle.get(cle); 
 					s=s+cle.toString(getAttributPos()+" = "+attributPositive)+" avec "+valeur+" exemples associés"+"\n";
 				}
