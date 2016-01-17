@@ -2,12 +2,12 @@ package projectEDR;
 import java.util.ArrayList;
 import java.util.Vector;
 public class EnsembleDeCas extends ArrayList<Cas>{
-	private int nbAttributs;
+
+	private static final long serialVersionUID = 1L;
 	private String[] attributs;
 	private String attributResultat;
 	public EnsembleDeCas(String[] s, String ar) {
 		attributs = s;
-		nbAttributs = s.length;
 		//Est l'attribut qui permet de comparer les résultats
 		//Par exemple, play pour l'exemple de cours, on vérifie ensuite qu'il y a bien que
 		//2 résultats possibles
@@ -91,7 +91,7 @@ public class EnsembleDeCas extends ArrayList<Cas>{
 	}
 	
 	public Vector<String> getAttributs() {
-		Vector<String> res=new Vector();
+		Vector<String> res=new Vector<>();
 		for(String s:attributs){
 			res.add(s);
 		}

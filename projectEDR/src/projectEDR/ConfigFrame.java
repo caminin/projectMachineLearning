@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -17,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class ConfigFrame extends JFrame implements ActionListener{
+	private static final long serialVersionUID = 1L;
 	private JButton button_open;
 	private JScrollPane affichage;
 	private JTextField entree;

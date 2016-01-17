@@ -1,6 +1,7 @@
 package projectEDR;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import weka.core.Instances;
@@ -8,8 +9,8 @@ import weka.core.Instances;
 
 public class FoilP {
 
-	//liste des règles
-	private ArrayList<Regle> regles;
+	//liste des règles avec leur nombre d'instances associés
+	private HashMap<Regle,Integer> regles;
 
 	//liste des + et -
 	// + = true, - = false
@@ -21,7 +22,7 @@ public class FoilP {
 
 	//initialisation
 	public Vector<String> init(String file, String attributePositive){
-		regles = new ArrayList<Regle>();
+		regles = new HashMap<>();
 
 		//gestion lecture du fichier
 		//remplacer le paramètre avec un système d'ouverture de fichier
@@ -100,7 +101,8 @@ public class FoilP {
 	
 	
 //Permet d'appliquer l'algo FoilP
-	public ArrayList<Regle> algo(){
+	@SuppressWarnings("unchecked")
+	public HashMap<Regle,Integer> algo(){
 		//Apprendre(Pos, Neg)
 		learn();
 		
@@ -121,8 +123,11 @@ public class FoilP {
 				pos2=retireCasEgaux(pos2,l);//on garde les cas qui ont l dans pos2
 				neg2=retireCasEgaux(neg2,l);//même chose dans neg2
 			}
-			regles.add(newRegle);//on ajoute la règle
+			
+			int i=pos.size();
 			pos=retireCasDifferent(pos,newRegle.getListLit());//on retire dans pos les éléments qui ont les littéraux de la nouvelle règle en littéral
+			i=i-pos.size();
+			regles.put(newRegle,i);//on ajoute la règle
 		}
 
 		return regles;
@@ -158,7 +163,6 @@ public class FoilP {
 	//retourne le littéral qui a le meilleur gain
 	public Literal getMaxGain(ArrayList<Cas> pos2, ArrayList<Cas> neg2){
 		ArrayList<Literal> list_l=new ArrayList<Literal>();//=ensembleDeCas.getListLiteraux();
-		int i=0;
 		for(Cas c:ensembleDeCas){//On récupère tous les littéraux différents en un seul exemplaire
 			for(int j = 0; j<c.getListLiteral().size()-1; j++){
 				boolean res=true;
@@ -215,5 +219,8 @@ public class FoilP {
 		}
 		return nbPos;
 	}
-
+	
+	public int getNombreConclusion(){
+		return ensembleDeCas.getNbCasPositif();
+	}
 }

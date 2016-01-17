@@ -1,18 +1,15 @@
 package projectEDR;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -20,11 +17,9 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 public class MyFrame extends JFrame implements ActionListener{
 	
@@ -112,7 +107,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			Vector<String> content=foil.init(file.getAbsolutePath(), attributPositive);
 			Vector<String> columnNames = foil.getHeader();
 			
-			Vector<Vector> rowData = new Vector<Vector>();
+			Vector<Vector<String>> rowData = new Vector<Vector<String>>();
 			for(int j=columnNames.size();j<content.size();j=j+columnNames.size()){
 				Vector<String> testing = new Vector<String>();
 				for(int i=0;i<columnNames.size();i++){
@@ -160,12 +155,18 @@ public class MyFrame extends JFrame implements ActionListener{
 				foil.init(file.getAbsolutePath(), attributPositive);
 				this.remove(affichage);
 				b.setText("Retour");
-				ArrayList<Regle> res_regle=foil.algo();
+				HashMap<Regle,Integer> res_regle=foil.algo();
 				String s="";
-				for(Regle r:res_regle){
-					s=s+r.toString(getAttributPos()+" = "+attributPositive)+"\n";
+				Set<Regle> cles = res_regle.keySet();
+				Iterator<Regle> it = cles.iterator();
+				while(it.hasNext()){
+					Regle cle = (Regle) it.next();
+					int valeur = res_regle.get(cle); 
+					s=s+cle.toString(getAttributPos()+" = "+attributPositive)+" avec "+valeur+" exemples associés"+"\n";
 				}
+				s=s+"\n"+"NOMBRE TOTAL D'EXEMPLES AVEC CETTE CONCLUSION : "+foil.getNombreConclusion();
 				JTextArea text=new JTextArea(s);
+				text.setEditable(false);
 				affichage=new JScrollPane(text);
 				affichage.setVisible(true);
 				this.add(affichage,BorderLayout.CENTER);
@@ -190,8 +191,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				list_res.add(att);
 			}
 		}
-		
-		ConfigFrame frame=new ConfigFrame(list_res,this);
+		new ConfigFrame(list_res,this);
 	}
 		
 }

@@ -33,7 +33,7 @@ public class Regle {
 				res+=" AND ";
 			}
 		}
-		res=res+"\n\t Conclusion : "+conclusion+"\n";
+		res=res+"\n\t Conclusion : "+conclusion;
 		
 		return res;
 	}
